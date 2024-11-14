@@ -5,16 +5,13 @@ import {
   getTodos,
   deleteTodo,
   createTodo,
+  updateTodo,
 } from "./components/services/reminders";
 import ReminderFrom from "./components/ReminderFrom";
 
 function App() {
   const [reminders, setReminders] = useState<Todo[]>([]);
-
-  const removeReminder = (id: number) => {
-    setReminders(reminders.filter((item) => item.id !== id));
-    deleteTodo(id);
-  };
+  const [editItem, setEditItem] = useState<Todo | undefined>();
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -33,10 +30,36 @@ function App() {
     setReminders([newReminder, ...reminders]);
   };
 
+  const removeReminder = (id: number) => {
+    setReminders(reminders.filter((item) => item.id !== id));
+    deleteTodo(id);
+  };
+
+  const editReminder = (item: Todo) => {
+    setEditItem(item);
+  };
+
+  const updateReminder = (updatedItem: Todo) => {
+    updateTodo(updatedItem);
+    setReminders(
+      reminders.map((reminder) =>
+        reminder.id === updatedItem.id ? updatedItem : reminder
+      )
+    );
+    setEditItem(undefined);
+  };
   return (
     <>
-      <ReminderFrom onAddReminder={addReminder} />
-      <ReminderList onRemoveReminder={removeReminder} items={reminders} />
+      <ReminderFrom
+        onAddReminder={addReminder}
+        editItem={editItem}
+        onUpdateReminder={updateReminder}
+      />
+      <ReminderList
+        onRemoveReminder={removeReminder}
+        items={reminders}
+        onEditReminder={editReminder}
+      />
     </>
   );
 }

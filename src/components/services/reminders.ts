@@ -18,10 +18,8 @@ export const getTodoById = (id: number): Promise<AxiosResponse<Todo[]>> =>
 export const createTodo = (data: Todo): Promise<AxiosResponse<Todo[]>> =>
   axiosInstance.post("/todos", data);
 
-export const updateTodo = (
-  id: number,
-  data: Todo
-): Promise<AxiosResponse<Todo[]>> => axiosInstance.put(`/todos/${id}`, data);
+export const updateTodo = (data: Todo): Promise<AxiosResponse<Todo[]>> =>
+  axiosInstance.put(`/todos/${data.id}`, JSON.stringify(data));
 
 export const deleteTodo = (id: number): Promise<AxiosResponse<void>> =>
   axiosInstance.delete(`/todos/${id}`);
